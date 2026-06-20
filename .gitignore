@@ -1,0 +1,39 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Environment / local config
+.env
+.env.*
+!.env.example
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# RL checkpoints and large generated outputs
+checkpoints/
+*.chkpt
+*.pt
+*.pth
+*.onnx
+*.mp4
+
+# Keep bulky local data out of git by default
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/external/*
+!data/external/.gitkeep
+
+# Workspace artifacts are local by default; force-add curated outputs if desired
+coursework/**/artifacts/*
+!coursework/**/artifacts/.gitkeep

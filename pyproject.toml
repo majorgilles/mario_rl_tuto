@@ -1,0 +1,31 @@
+[project]
+name = "mario-rl-tuto"
+version = "0.1.0"
+description = "Follow-along repository for PyTorch's Mario-playing RL agent tutorial."
+readme = "README.md"
+requires-python = ">=3.10,<3.12"
+dependencies = [
+    "gym==0.25.2",
+    "gym-super-mario-bros==7.4.0",
+    "jupyter>=1.1",
+    "matplotlib>=3.7",
+    "numpy<2",
+    "pillow>=10",
+    "torch>=2.2",
+    "torchvision>=0.17",
+    "tensordict==0.3.0",
+    "torchrl==0.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29",
+    "ruff>=0.12",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP"]
