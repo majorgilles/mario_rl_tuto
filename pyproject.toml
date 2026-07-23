@@ -3,18 +3,19 @@ name = "mario-rl-tuto"
 version = "0.1.0"
 description = "Follow-along repository for PyTorch's Mario-playing RL agent tutorial."
 readme = "README.md"
-requires-python = ">=3.10,<3.12"
+requires-python = ">=3.13,<3.14"
 dependencies = [
-    "gym==0.25.2",
-    "gym-super-mario-bros==7.4.0",
+    "gymnasium>=1.0.0",
+    "gym-super-mario-bros>=9.1.0",
+    "nes-py>=9.0.1",
     "jupyter>=1.1",
     "matplotlib>=3.7",
-    "numpy<2",
+    "numpy>=1.26",
     "pillow>=10",
-    "torch>=2.2",
-    "torchvision>=0.17",
-    "tensordict==0.3.0",
-    "torchrl==0.3.0",
+    "torch>=2.7",
+    "torchvision>=0.22",
+    "tensordict>=0.9.0,<0.10.0",
+    "torchrl>=0.9.0,<0.10.0",
 ]
 
 [dependency-groups]
@@ -23,9 +24,18 @@ dev = [
     "ruff>=0.12",
 ]
 
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu126" }]
+torchvision = [{ index = "pytorch-cu126" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py313"
 
 [tool.ruff.lint]
 select = ["B", "E", "F", "I", "UP"]

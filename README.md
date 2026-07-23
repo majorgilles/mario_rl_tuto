@@ -18,18 +18,45 @@ This repo is a personal learning workspace for completing the tutorial end-to-en
 
 ## Setup
 
-This project uses `uv` and targets Python 3.10 because the tutorial depends on legacy Gym-era packages.
+This project uses `uv` and targets **Python 3.13**. It runs the modernized stack
+(`gymnasium`, `gym-super-mario-bros>=9.1`, `nes-py>=9.0.1`) so that `nes-py` installs
+from a prebuilt Windows wheel instead of compiling C++ from source.
 
 ```bash
-uv python install 3.10
-uv sync
+uv python install 3.13
+uv sync --no-install-package torchvision
 uv run python -m ipykernel install --user --name mario-rl-tuto --display-name "Python (mario-rl-tuto)"
 uv run jupyter notebook
 ```
 
-For CUDA-enabled PyTorch, follow the install command recommended by [pytorch.org](https://pytorch.org/get-started/locally/) for your GPU/driver, then update this environment as needed.
+### CUDA on Windows (torch + torchvision)
 
-> Note: the source tutorial uses legacy `gym`, `gym-super-mario-bros`, `tensordict==0.3.0`, and `torchrl==0.3.0`. `numpy<2` is pinned for compatibility with unmaintained Gym packages.
+`torch` is pinned to the CUDA 12.6 build via the `pytorch-cu126` index in `pyproject.toml`.
+The PyTorch index does **not** publish hashes for its Windows torchvision CUDA wheels,
+which makes plain `uv sync` fail its hash check on torchvision. Work around it by
+excluding torchvision from `uv sync` (above) and installing it separately:
+
+```bash
+# after `uv sync --no-install-package torchvision`:
+uv pip install "torchvision>=0.22" --index https://download.pytorch.org/whl/cu126 --no-verify-hashes
+```
+
+Verify the GPU is picked up (torch and torchvision must both report `+cu126`):
+
+```bash
+uv run --no-sync python -c "import torch, torchvision; print(torch.__version__, torchvision.__version__, torch.cuda.is_available())"
+# -> 2.13.0+cu126 0.28.0+cu126 True
+```
+
+> **Important:** a plain `uv sync` (without `--no-install-package torchvision`) will fail on
+> the torchvision hash and can revert `torch` to the CPU build. If `torch.cuda.is_available()`
+> ever returns `False` or you hit `operator torchvision::nms does not exist`, re-run the two
+> commands above to restore the matched CUDA builds.
+
+> Note: the original tutorial used legacy `gym`, `gym-super-mario-bros==7.4.0`,
+> `tensordict==0.3.0`, and `torchrl==0.3.0`. This repo modernizes to `gymnasium`,
+> `torchrl>=0.9`, and `tensordict>=0.9`; the notebook is adapted to the Gymnasium API
+> (`env.step()` returns 5 values, `env.reset()` returns `(obs, info)`).
 
 ## Lesson table
 
